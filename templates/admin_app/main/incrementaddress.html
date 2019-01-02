@@ -1,0 +1,57 @@
+<style>
+	.table1{
+		border-color: lightgray;
+	}
+	.td1,.td2{
+		height: 36px;
+	}
+	.td1{
+		text-align: right;
+		padding-right: 5px;
+		background-color: rgb(230,242,254);
+		font-size: 14px;
+	}
+	.td2{
+		padding-left: 5px;
+	}
+</style>
+
+<form action="{% url 'adm:inc_logic' %}" method="post" enctype="application/x-www-form-urlencoded">
+    {% csrf_token %}
+    <table class="table1" border="1" cellspacing="0" width="1110px">
+        <tr>
+            <td class="td1">收货人:</td>
+            <td class="td2"><input type="text" name="consignee" /></td>
+        </tr>
+        <tr>
+            <td class="td1">详细地址:</td>
+            <td class="td2"><input type="text" name="detailAddress"/></td>
+        </tr>
+        <tr>
+            <td class="td1">邮政编码:</td>
+            <td class="td2"><input type="text" name="postalcode"/></td>
+        </tr>
+        <tr>
+            <td class="td1">手机号:</td>
+            <td class="td2"><input type="text" name="mobilephone" /></td>
+        </tr>
+        <tr>
+            <td class="td1">固定电话:</td>
+            <td class="td2"><input type="text" name="telephone" /></td>
+        </tr>
+        <tr>
+            <td class="td1">所属用户:</td>
+            <td class="td2">
+                <select name="userid"  id="userid">
+                    {% for user in users %}
+                        <option value="{{ user.id }}">{{ user.email }}</option>
+                    {% endfor %}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td class="td1">提交信息:</td>
+            <td class="td2"><input type="submit" name="submit" value="保存" /></td>
+        </tr>
+    </table>
+</form>

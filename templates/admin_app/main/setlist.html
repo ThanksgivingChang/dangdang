@@ -1,0 +1,257 @@
+{% load static %}
+<style>
+	.table1{
+		border-color: lightgray;
+	}
+	.td1,.td2{
+		height: 36px;
+	}
+	.td1{
+		text-align: right;
+		padding-right: 5px;
+		background-color: rgb(230,242,254);
+		font-size: 14px;
+	}
+	.td2{
+		padding-left: 5px;
+	}
+</style>
+{#{% if success %}#}
+{#    <script>#}
+{#        window.alert('修改成功')#}
+{#    </script>#}
+{#{% endif %}#}
+<form action="{% url 'adm:set_logic' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <table class="table1" border="1" cellspacing="0" width="1110px">
+        <tr>
+            <td class="td1">商品名称:</td>
+            <td class="td2"><input type="text" name="name"  value="{{ product.name }}"/></td>
+        </tr>
+        <tr>
+            <td class="td1">作者:</td>
+            <td class="td2"><input type="text" name="author" value="{{ product.author }}"/></td>
+        </tr>
+        <tr>
+            <td class="td1">封面图片:</td>
+            <td class="td2"><input type="file" name="face" value="{{ product.face }}"/></td>
+            <td class="td2"><img src="{% static product.face.url %}" alt="" width="20px" height="20px"></td>
+        </tr>
+        <tr>
+            <td class="td1">出版社:</td>
+            <td class="td2"><input type="text" name="publishing_house" value="{{ product.publishing_house }}" /></td>
+        </tr>
+        <tr>
+            <td class="td1">版次:</td>
+            <td class="td2"><input type="text" name="edition" value="{{ product.edition }}"/></td>
+        </tr>
+        <tr>
+            <td class="td1">印刷时间:</td>
+            <td class="td2"><input type="date" name="publishing_time" value="{{ product.publishing_time }}"/></td>
+        </tr>
+        <tr>
+            <td class="td1">印次:</td>
+            <td class="td2"><input type="text" name="print_time" value="{{ product.print_time }}"/></td>
+        </tr>
+        <tr>
+            <td class="td1">ISBN:</td>
+            <td class="td2"><input type="text" name="isbn" value="{{ product.isbn }}"/></td>
+        </tr>
+        <tr>
+            <td class="td1">字数:</td>
+            <td class="td2"><input type="text" name="word" value="{{ product.word }}"/></td>
+        </tr>
+        <tr>
+            <td class="td1">页数:</td>
+            <td class="td2"><input type="text" name="number_of_page" value="{{ product.number_of_page }}"/></td>
+        </tr>
+        <tr>
+            <td class="td1">开本:</td>
+            <td class="td2">
+                <select name="format_of_book" id="format_of_book">
+                    {% if product.format_of_book == '16' %}
+                        <option value="16" selected="selected">16开</option>
+                    {% else %}
+                        <option value="16">16开</option>
+                    {% endif %}
+                    {% if product.format_of_book == '24' %}
+                        <option value="24" selected="selected">24开</option>
+                    {% else %}
+                        <option value="24">24开</option>
+                    {% endif %}
+                    {% if product.format_of_book == '32' %}
+                        <option value="32" selected="selected">32开</option>
+                    {% else %}
+                        <option value="32">32开</option>
+                    {% endif %}
+                </select>
+        </tr>
+        <tr>
+            <td class="td1">纸张:</td>
+            <td class="td2">
+                <select name="paper_size" id="paper_size">
+                    {% if product.paper_size == '纯纸质' %}
+                        <option value="纯纸质" selected="selected">纯纸质</option>
+                    {% else %}
+                        <option value="纯纸质">纯纸质</option>
+                    {% endif %}
+                    {% if product.paper_size == '轻型纸' %}
+                        <option value="轻型纸" selected="selected">轻型纸</option>
+                    {% else %}
+                         <option value="轻型纸">轻型纸</option>
+                    {% endif %}
+                    {% if product.paper_size == '胶版纸' %}
+                        <option value="胶版纸" selected="selected">胶版纸</option>
+                    {% else %}
+                        <option value="胶版纸">胶版纸</option>
+                    {% endif %}
+                    {% if product.paper_size == '铜版纸' %}
+                        <option value="铜版纸" selected="selected">铜版纸</option>
+                    {% else %}
+                        <option value="铜版纸">铜版纸</option>
+                    {% endif %}
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td class="td1">包装:</td>
+            <td class="td2">
+                <select name="packaging" id="packaging">
+                    {% if product.packaging == '平装' %}
+                        <option value="平装" selected="selected">平装</option>
+                    {% else %}
+                        <option value="平装">平装</option>
+                    {% endif %}
+                    {% if product.packaging == '精装' %}
+                        <option value="精装" selected="selected">精装</option>
+                    {% else %}
+                        <option value="精装">精装</option>
+                    {% endif %}
+                    {% if product.packaging == '平装-胶订' %}
+                        <option value="平装-胶订" selected="selected">平装-胶订</option>
+                    {% else %}
+                        <option value="平装-胶订">平装-胶订</option>
+                    {% endif %}
+                    {% if product.packaging == '平装-锁线胶订' %}
+                        <option value="平装-锁线胶订" selected="selected">平装-锁线胶订</option>
+                    {% else %}
+                        <option value="平装-锁线胶订">平装-锁线胶订</option>
+                    {% endif %}
+                </select>
+        </tr>
+        <tr>
+            <td class="td1">商品父类:</td>
+            <td class="td2">
+                <select name="menus" onclick="mycategory()" id="parentcategory">
+                    <option value="">请选择一级类</option>
+                    {% for pcategory in parentcategory %}
+                        <option value="{{ pcategory.id }}">{{ pcategory.name }}</option>
+                    {% endfor %}
+                </select>
+                <select name="procate" id="procate">
+                    <option value="">请选择二级分类</option>
+                </select>
+            </td>
+            <script>
+                function mycategory(){
+                    var procate = document.getElementById('procate');
+                    //删除节点
+                    var lens = procate.children.length;
+{#                    console.log(lens);#}
+                    if(lens > 1){
+                        for(var j=1;j < lens;j++){
+                                procate.children[1].remove()
+                        }
+                    }
+                    var ms = document.getElementById('parentcategory');
+                    var caid = ms.value;
+                    var xhr_cate=new XMLHttpRequest();
+                    var url = "{% url 'adm:sec' %}?caid="+caid;
+                    xhr_cate.open('get',url);
+                    xhr_cate.send();
+                    xhr_cate.onreadystatechange=function(){
+                        if( xhr_cate.readyState == 4 && xhr_cate.status == 200){
+                            var res = xhr_cate.responseText;
+                            var obj = eval('('+res+')');
+{#                            console.log(obj.sec);#}
+{#                            var defaultopt = document.createElement('option');#}
+{#                            defaultopt.innerText='请选择二级分类';#}
+                            for(var i = 0;i < obj.sec.length;i++){
+                                var procate2 = document.getElementById('procate');
+                                var opt = document.createElement('option');
+{#                                console.log(obj.sec[i]);#}
+                                opt.value=obj.sec[i].id;
+                                opt.innerText=obj.sec[i].name;
+                                procate2.appendChild(opt)
+                            }
+                        }
+                    }
+                }
+            </script>
+        </tr>
+
+        <tr>
+            <td class="td1">状态:</td>
+            <td class="td2">
+                <select name="status" id="status">
+                    {% if product.status == '1' %}
+                        <option value="1" selected="selected">1</option>
+                    {% else %}
+                        <option value="1">1</option>
+                    {% endif %}
+                    {% if product.status == '2' %}
+                        <option value="2" selected="selected">2</option>
+                    {% else %}
+                        <option value="2">2</option>
+                    {% endif %}
+                </select>
+        </tr>
+        <tr>
+            <td class="td1">销量:</td>
+            <td class="td2"><input type="text" name="sales" value="{{ product.addproduct.sales }}"/></td>
+        </tr>
+        <tr>
+            <td class="td1">市场价:</td>
+            <td class="td2"><input type="text" name="price" value="{{ product.addproduct.price }}"/></td>
+        </tr>
+        <tr>
+            <td class="td1">当当价:</td>
+            <td class="td2"><input type="text" name="dangdang_price" value="{{ product.addproduct.dangdang_price }}"/></td>
+        </tr>
+        <tr>
+            <td class="td1">顾客评分:</td>
+            <td class="td2"><input type="text" name="score" value="{{ product.addproduct.score }}"/></td>
+        </tr>
+        <tr>
+            <td class="td1">上架时间:</td>
+            <td class="td2">
+                <input type="date" name="issue" value="{{ product.addproduct.issue }}"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="td1">编辑推荐:</td>
+            <td class="td2">
+                <select name="recommand" id="recommand">
+                    {% if product.addproduct.recommand == '1' %}
+                        <option value="1" selected="selected">1</option>
+                    {% else %}
+                        <option value="1">1</option>
+                    {% endif %}
+                    {% if product.addproduct.recommand == '2' %}
+                        <option value="2" selected="selected">2</option>
+                    {% else %}
+                        <option value="2">2</option>
+                    {% endif %}
+                    {% if product.addproduct.recommand == '3' %}
+                        <option value="3" selected="selected">3</option>
+                    {% else %}
+                        <option value="3">3</option>
+                    {% endif %}
+                </select>
+        </tr>
+        <tr>
+            <td class="td1">提交修改:</td>
+            <td class="td2"><input type="submit" name="submit" value="修改" /></td>
+        </tr>
+    </table>
+</form>

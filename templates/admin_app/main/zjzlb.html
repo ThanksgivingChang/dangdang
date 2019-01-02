@@ -1,0 +1,65 @@
+<style>
+	.table1{
+		border-color:rgba(180,207,207,0.4);
+	}
+	.td1,.td2{
+		height: 36px;
+	}
+	.td1{
+		text-align: right;
+		padding-right: 5px;
+		background-color: rgb(230,242,254);
+		font-size: 14px;
+	}
+	.td2{
+		padding-left: 5px;
+	}	
+</style>
+<table class="table1" border="1" cellspacing="0" width="1110px">
+	<tr>
+		<td class="td1">子类名称:</td>
+		<td class="td2"><input type="text" id="soncategory"/></td>
+	</tr>
+	<tr>
+		<td class="td1">父类名称:</td>
+		<td class="td2">
+			<select name="parent" id="fathercategory">
+                {% for parent in parentcategory %}
+                    <option value="{{ parent.id }}">{{ parent.name }}</option>
+                {% endfor %}
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td style="padding-left: 24%;" colspan="2">
+			<input type="button" value="提交" onclick="commitfunction(0)"/>
+			<input type="button" value="重置" onclick="commitfunction(1)"/>
+		</td>
+	</tr>
+</table>
+<script>
+    function commitfunction(a){
+        var soncategory = document.getElementById('soncategory');
+        var newcategory = soncategory.value;
+        var fathercategory = document.getElementById('fathercategory');
+        var fid = fathercategory.value;
+        if(a ==0){
+            var xhr_commit = new XMLHttpRequest();
+            xhr_commit.open('get','{% url "adm:soncategory_logic" %}?cate='+newcategory+'&fid='+fid);
+            xhr_commit.send();
+            xhr_commit.onreadystatechange=function(){
+                if(xhr_commit.status == 200 && xhr_commit.readyState == 4){
+                    var res = xhr_commit.responseText;
+                    if(res == 0){
+                        alert('该类别已经存在，请重新输入')
+                    }else if(res == 1){
+                        alert('添加成功');
+                        location.href="{% url 'adm:ctlt' %}"
+                    }
+                }
+            }
+        }else if(a==1){
+            soncategory.value=null
+        }
+    }
+</script>

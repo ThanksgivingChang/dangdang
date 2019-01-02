@@ -1,0 +1,93 @@
+<style>
+	.d1{
+		background-color: rgb(53,60,68);
+		position: relative;
+		height: 30px;
+		line-height: 30px;
+		padding-left: 10px;
+	}
+	.s1{
+		font-size: 12px;
+		color: white;
+	}
+	.s2{
+		position: absolute;
+		right: 10px;
+	}
+	.s2 a{
+		color: white;
+		font-size: 12px;
+		text-decoration: none;
+	}
+	.t1{
+		border-color:aliceblue;
+		margin-top: 2px;
+		font-size: 12px;
+		text-align: center;
+		background-color: rgb(230,242,254);
+	}
+	.bottom{
+		font-size: 13px;
+		padding-left: 15px;
+		position: relative;
+	}
+	.bs{
+		position: absolute;
+		right: 40px;
+	}
+	.bs a{
+		text-decoration: none;
+		color: black;
+	}
+	.bs a:hover{
+		color: cornflowerblue;
+		text-decoration: underline;
+	}
+</style>
+<div class="d1">
+	<span class="s1">商品类别管理</span>
+	<span class="s2">
+		<a href="#">添加</a>
+		<a href="#">删除</a>
+	</span>
+</div>
+<table border="2" width="100%" cellspacing="0" class="t1">
+	<tr>
+		<td>商品类别ID</td>
+		<td>类名称</td>
+        <td>类别等级</td>
+        <td>父类别</td>
+		<td>更多</td>
+	</tr>
+    {% for category in pages %}
+        <tr>
+            <td>{{ category.id }}</td>
+            <td>{{ category.name }}</td>
+            {% if category.parent == 0 %}
+                <td>一级类别</td>
+                <td>--</td>
+            {% else %}
+                <td>二级类别</td>
+                <td>{{ category.parent }}</td>
+            {% endif %}
+            <td>
+                <a href="{% url 'adm:delcate' %}?cid={{ category.id }}">删除</a>
+            </td>
+        </tr>
+    
+    {% endfor %}
+    
+</table>
+<div class="bottom">
+	共有{{ pages.paginator.count }} 条记录，当前第 {{ pages.number }} 页，共{{ pages.paginator.num_pages }} 页
+	<span class="bs">
+        <a href="{% url 'adm:ctlt' %}?num=1" style="margin-right: 20px;">首页</a>
+        {% if pages.has_previous %}
+            <a href="{% url 'adm:ctlt' %}?num={{ pages.previous_page_number }}" style="margin-right: 20px;">上一页</a>
+        {% endif %}
+        {% if pages.has_next %}
+            <a href="{% url 'adm:ctlt' %}?num={{ pages.next_page_number }}" style="margin-right: 20px;">下一页</a>
+        {% endif %}
+		<a href="{% url 'adm:ctlt' %}?num={{ pages.paginator.num_pages }}">尾页</a>
+	</span>
+</div>

@@ -1,0 +1,53 @@
+<style>
+	.t1{
+		text-align: right;
+		padding-right: 5px;
+		background-color: rgb(230,242,254);
+		width: 46%;
+		font-size: 12px;
+	}
+	.t2{
+		height: 30px;
+		padding-left: 42%;
+		
+	}
+	.t1,.t2{
+		height: 30px;
+	}
+</style>
+<table border="1" cellspacing="0" style="width: 100%;border-color:rgba(180,207,207,0.4)">
+	<tr>
+		<td class="t1">父类名称：</td>
+		<td style="padding-left: 4px;"><input type="text" id="category"/></td>
+	</tr>
+	<tr>
+		<td class="t2" colspan="2">
+			<input type="button" value="提交" onclick="commitfunction(0)" />
+			<input type="button" value="重置" onclick="commitfunction(1)"/>
+		</td>
+	</tr>
+    <script>
+        function commitfunction(a){
+            var category = document.getElementById('category');
+            var newcategory = category.value;
+            if(a ==0){
+                var xhr_commit = new XMLHttpRequest();
+                xhr_commit.open('get','{% url "adm:category_logic" %}?cate='+newcategory);
+                xhr_commit.send();
+                xhr_commit.onreadystatechange=function(){
+                    if(xhr_commit.status == 200 && xhr_commit.readyState == 4){
+                        var res = xhr_commit.responseText;
+                        if(res == 0){
+                            alert('该类别已经存在，请重新输入')
+                        }else if(res == 1){
+                            alert('添加成功');
+                            location.href="{% url 'adm:ctlt' %}"
+                        }
+                    }
+                }
+            }else if(a==1){
+                category.value=null
+            }
+        }
+    </script>
+</table>
